@@ -1,4 +1,4 @@
-# Run virtual environment
+# Install and run virtual environment
 ```
 pip install pipenv
 ```
@@ -9,7 +9,15 @@ pipenv shell
 pipenv install -r requirements.txt
 ```
 
+# Connect to local MongoDB database
+1. Run mongo container in docker
+2. Open MongoDB Compass
+3. Connect to ```mongodb://localhost:27017```
+
+
 # How to run 
+1. Make sure you connect to the mongodb database as specified above.
+2. Run the following command in terminal.
 ```
 uvicorn main:app --reload
 ```
