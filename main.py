@@ -64,3 +64,10 @@ async def delete_sport_info(sport_id):
         return "Succesfully deleted sport_info item"
     raise HTTPException(404, f"there is no sport_info item with this sport_id {sport_id}")
 ##################################################################
+
+@app.get("/paris_org/olympic/{sport_id}", response_model=ParisDB)
+async def get_sport_detail_by_sport_id(sport_id):
+    response = await fetch_one_sport_info(sport_id)
+    if response:
+        return response
+    raise HTTPException(404, f"There is no item with this sport_id {sport_id}")
