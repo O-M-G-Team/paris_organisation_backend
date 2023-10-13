@@ -1,12 +1,19 @@
-# Install and run virtual environment
+# Install virtual environment
 ```
 pip install pipenv
 ```
+
+# Run virtual environment
 ```
 pipenv shell
 ```
 ```
 pipenv install -r requirements.txt
+```
+
+# Deactivate virtual environment
+```
+deactivate
 ```
 
 # Connect to local MongoDB database
