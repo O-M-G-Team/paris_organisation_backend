@@ -15,7 +15,7 @@ from database import (
     remove_sport_info
 )
 
-origins = ['http://localhost:3000']
+origins = ['http://localhost:5173']
 
 app.add_middleware(
     CORSMiddleware, 
