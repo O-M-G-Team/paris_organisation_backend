@@ -30,7 +30,8 @@ def read_root():
     return {"paris": "organisation"}
 
 ######################Example CRUD request######################
-@app.get("/api/sport_info")
+
+@app.get("/paris_org/olympic/sport_info")
 async def get_sport_info():
     response = await fetch_all_sport_infos()
     return response
