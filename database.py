@@ -9,6 +9,10 @@ database = client.ParisDB
 
 collection = database.sport_info
 
+async def update_sport_result(sport_id, result):
+    document = await collection.find_one_and_update({"sport_id": sport_id},{'$set': {"result": result}})
+    return document
+
 ######################Example CRUD request######################
 async def fetch_one_sport_info(sport_id):
     document = await collection.find_one({"sport_id": sport_id})

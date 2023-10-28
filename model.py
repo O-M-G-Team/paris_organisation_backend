@@ -8,6 +8,8 @@ class ParisDB(BaseModel):
     sport_name: str
     participating_country: list
     date_time: datetime
-    result: List[Dict]
+    result: dict
 
-
+class Result(BaseModel):
+    sport_id: str
+    result: dict
