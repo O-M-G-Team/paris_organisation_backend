@@ -12,10 +12,12 @@ from database import (
     fetch_all_sport_infos,
     create_sport_info,
     update_sport_info,
-    remove_sport_info
+    remove_sport_info, 
+    fetch_IOC
 )
 
 origins = ['http://localhost:3000']
+ioc = ""
 
 app.add_middleware(
     CORSMiddleware, 
