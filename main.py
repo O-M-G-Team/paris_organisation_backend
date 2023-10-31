@@ -12,12 +12,10 @@ from database import (
     fetch_all_sport_infos,
     create_sport_info,
     update_sport_info,
-    remove_sport_info, 
-    fetch_IOC
+    remove_sport_info
 )
 
-origins = ['http://localhost:3000']
-ioc = ""
+origins = ['http://localhost:5173']
 
 app.add_middleware(
     CORSMiddleware, 
@@ -32,7 +30,8 @@ def read_root():
     return {"paris": "organisation"}
 
 ######################Example CRUD request######################
-@app.get("/api/sport_info")
+
+@app.get("/paris_org/olympic/sport_info")
 async def get_sport_info():
     response = await fetch_all_sport_infos()
     return response
@@ -66,3 +65,10 @@ async def delete_sport_info(sport_id):
         return "Succesfully deleted sport_info item"
     raise HTTPException(404, f"there is no sport_info item with this sport_id {sport_id}")
 ##################################################################
+
+@app.get("/paris_org/olympic/{sport_id}", response_model=ParisDB)
+async def get_sport_detail_by_sport_id(sport_id):
+    response = await fetch_one_sport_info(sport_id)
+    if response:
+        return response
+    raise HTTPException(404, f"There is no item with this sport_id {sport_id}")
