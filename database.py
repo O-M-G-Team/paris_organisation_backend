@@ -11,7 +11,10 @@ database = client.ParisDB
 collection = database.sport_info
 
 # fetch from IOC and store in Paris database
-async def fetch_IOC():
+
+
+async def fetch_api():
+
     try:
         res = requests.get("https://nongnop.azurewebsites.net/match_table")
         res.raise_for_status()
@@ -39,7 +42,7 @@ async def fetch_IOC():
                     "result": result,
                 }
 
-                await create_sport_info(new_sport_info)
+                doc = await create_sport_info(new_sport_info)
 
         return "Sport info updated or created successfully"
     except requests.RequestException as e:

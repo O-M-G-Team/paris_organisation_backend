@@ -3,8 +3,8 @@ from database import (
     fetch_all_sport_infos,
     create_sport_info,
     update_sport_info,
-    remove_sport_info,
-    fetch_IOC
+    remove_sport_info, 
+    fetch_api
 )
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -38,11 +38,10 @@ async def get_sport_info():
     response = await fetch_all_sport_infos()
     return response
 
-
-@app.post("/paris_org/olympic/sport_info")
-async def insert_data_IOC():
-    result = await fetch_IOC()
-    return result
+@app.get("/api/data-ioc")
+async def ioc_api():
+    res = await fetch_api()
+    return res
 
 
 @app.get("/api/sport_info/{sport_id}", response_model=ParisDB)
