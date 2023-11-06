@@ -39,7 +39,7 @@ async def fetch_IOC():
                     "result": result,
                 }
 
-                inserted_document = await create_sport_info(new_sport_info)
+                await create_sport_info(new_sport_info)
 
         return "Sport info updated or created successfully"
     except requests.RequestException as e:

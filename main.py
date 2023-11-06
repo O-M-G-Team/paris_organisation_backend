@@ -39,7 +39,7 @@ async def get_sport_info():
     return response
 
 
-@app.post("/insert_data_IOC")
+@app.post("/paris_org/olympic/sport_info")
 async def insert_data_IOC():
     result = await fetch_IOC()
     return result
