@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import Dict
 from datetime import datetime
 from pydantic import BaseModel
 
@@ -6,9 +6,10 @@ from pydantic import BaseModel
 class ParisDB(BaseModel):
     sport_id: str
     sport_name: str
+    sport_type: str | None = None
     participating_country: list
     date_time: datetime
-    result: dict
+    result: Dict[str,str]
 
 class Result(BaseModel):
     sport_id: str
