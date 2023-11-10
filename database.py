@@ -25,7 +25,7 @@ async def fetch_api():
             sport_name = event["sport_name"]
             participating_country = event["participating_country"]
             date_time = event["datetime"], 
-            result = []
+            result = {}
 
             existing_sport_info = await collection.find_one({"sport_id": sport_id})
 
