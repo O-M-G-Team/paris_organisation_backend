@@ -21,10 +21,10 @@ async def fetch_api():
         data = res.json()
 
         for event in data:
-            sport_id = event["_id"]
+            sport_id = event["sport_id"]
             sport_name = event["sport_name"]
             participating_country = event["participating_country"]
-            date_time = event["datetime"], 
+            date_time = event["datetime"]["%date"]
             result = {}
 
             existing_sport_info = await collection.find_one({"sport_id": sport_id})
@@ -47,6 +47,7 @@ async def fetch_api():
         return "Sport info updated or created successfully"
     except requests.RequestException as e:
         return f"Failed to fetch data from the API: {str(e)}"
+
 
 
 ###################### Example CRUD request######################
