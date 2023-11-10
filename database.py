@@ -16,7 +16,7 @@ collection = database.sport_info
 async def fetch_api():
 
     try:
-        res = requests.get("https://nongnop.azurewebsites.net/match_table")
+        res = requests.get("nongnop.azurewebsites.net/match_table/Final")
         res.raise_for_status()
         data = res.json()
 
