@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from model import ParisDB
+from model import ParisDB, Result
 from typing import List, Dict
 from datetime import datetime
 
@@ -12,7 +12,8 @@ from database import (
     fetch_all_sport_infos,
     create_sport_info,
     update_sport_info,
-    remove_sport_info
+    remove_sport_info,
+    update_sport_result,
 )
 
 origins = ['http://localhost:5173']
@@ -28,6 +29,14 @@ app.add_middleware(
 @app.get("/")
 def read_root():
     return {"paris": "organisation"}
+
+@app.put("/paris_org/olympic/enter_result", response_model=Result)
+async def put_sport_result(sport_result: Result):
+    """Update the result of each sport id"""
+    response = await update_sport_result(sport_result.sport_id, sport_result.result)
+    if response:
+        return response
+    raise HTTPException(404, f"there is no sport_result item with this sport_id {sport_result.sport_id}")
 
 ######################Example CRUD request######################
 

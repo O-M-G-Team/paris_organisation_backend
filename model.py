@@ -11,4 +11,6 @@ class ParisDB(BaseModel):
     date_time: datetime
     result: Dict[str,str]
 
-
+class Result(BaseModel):
+    sport_id: str
+    result: dict
