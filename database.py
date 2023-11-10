@@ -16,7 +16,7 @@ collection = database.sport_info
 async def fetch_api():
 
     try:
-        res = requests.get("nongnop.azurewebsites.net/match_table/Final")
+        res = requests.get("https://nongnop.azurewebsites.net/match_table/Final")
         res.raise_for_status()
         data = res.json()
 
@@ -24,8 +24,8 @@ async def fetch_api():
             sport_id = event["_id"]
             sport_name = event["sport_name"]
             participating_country = event["participating_country"]
-            date_time = event["datetime"]
-            result = event["result"]
+            date_time = event["datetime"], 
+            result = []
 
             existing_sport_info = await collection.find_one({"sport_id": sport_id})
 
@@ -38,8 +38,8 @@ async def fetch_api():
                     "sport_id": sport_id,
                     "sport_name": sport_name,
                     "participating_country": participating_country,
-                    "date_time": date_time,
-                    "result": result,
+                    "date_time": date_time, 
+                    "result": result
                 }
 
                 doc = await create_sport_info(new_sport_info)
