@@ -30,8 +30,8 @@ app.add_middleware(
 def read_root():
     return {"paris": "organisation"}
 
-@app.put("/paris_org/olympic/enter_result", response_model=Result)
-async def put_sport_result(sport_result: Result):
+@app.put("/paris_org/olympic/enter_result", response_model=ParisDB)
+async def put_sport_result(sport_result: ParisDB):
     """Update the result of each sport id"""
     response = await update_sport_result(sport_result.sport_id, sport_result.result)
     if response:
