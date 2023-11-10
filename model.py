@@ -9,8 +9,4 @@ class ParisDB(BaseModel):
     sport_type: str | None = None
     participating_country: list
     date_time: datetime
-    result: Dict[str,str]
-
-class Result(BaseModel):
-    sport_id: str
-    result: dict
+    result: Dict[str,list]
