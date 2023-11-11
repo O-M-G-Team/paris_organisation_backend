@@ -31,12 +31,12 @@ def read_root():
     return {"paris": "organisation"}
 
 @app.put("/paris_org/olympic/enter_result", response_model=Result)
-async def put_sport_result(sport_result: Result):
+async def put_sport_result(sport_request: Result):
     """Update the result of each sport id"""
-    response = await update_sport_result(sport_result.sport_id, sport_result.result)
+    response = await update_sport_result(sport_request.sport_id, sport_request.result)
     if response:
         return response
-    raise HTTPException(404, f"there is no sport_result item with this sport_id {sport_result.sport_id}")
+    raise HTTPException(404, f"there is no sport_result item with this sport_id {sport_request.sport_id}")
 
 ######################Example CRUD request######################
 
