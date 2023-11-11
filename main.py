@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from model import ParisDB
+from model import ParisDB, Result
 from typing import List, Dict
 from datetime import datetime
 
@@ -30,8 +30,8 @@ app.add_middleware(
 def read_root():
     return {"paris": "organisation"}
 
-@app.put("/paris_org/olympic/enter_result", response_model=ParisDB)
-async def put_sport_result(sport_result: ParisDB):
+@app.put("/paris_org/olympic/enter_result", response_model=Result)
+async def put_sport_result(sport_result: Result):
     """Update the result of each sport id"""
     response = await update_sport_result(sport_result.sport_id, sport_result.result)
     if response:

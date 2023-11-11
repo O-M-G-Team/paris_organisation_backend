@@ -10,3 +10,7 @@ class ParisDB(BaseModel):
     participating_country: list
     date_time: datetime
     result: Dict[str,list]
+    
+class Result(BaseModel):
+    sport_id: str
+    result: Dict[str,list]
