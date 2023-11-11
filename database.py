@@ -12,7 +12,6 @@ collection = database.sport_info
 
 # fetch from IOC and store in Paris database
 
-
 async def fetch_api():
 
     try:
@@ -51,6 +50,11 @@ async def fetch_api():
 
 
 ###################### Example CRUD request######################
+async def update_sport_result(sport_id, result):
+    document = await collection.find_one_and_update({"sport_id": sport_id},{'$set': {"result": result}})
+    return document
+
+
 async def fetch_one_sport_info(sport_id):
     document = await collection.find_one({"sport_id": sport_id})
     return document

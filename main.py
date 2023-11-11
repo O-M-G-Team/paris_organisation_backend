@@ -15,6 +15,16 @@ from datetime import datetime
 # App object
 app = FastAPI()
 
+from database import (
+    fetch_one_sport_info,
+    fetch_all_sport_infos,
+    create_sport_info,
+    update_sport_info,
+    remove_sport_info,
+    update_sport_result,
+    fetch_api
+)
+
 origins = ['http://localhost:5173']
 
 app.add_middleware(
@@ -30,7 +40,16 @@ app.add_middleware(
 def read_root():
     return {"paris": "organisation"}
 
+
 ###################### Example CRUD request######################
+
+@app.put("/paris_org/olympic/enter_result", response_model=ParisDB)
+async def put_sport_result(sport_result: ParisDB):
+    """Update the result of each sport id"""
+    response = await update_sport_result(sport_result.sport_id, sport_result.result)
+    if response:
+        return response
+    raise HTTPException(404, f"there is no sport_result item with this sport_id {sport_result.sport_id}")
 
 
 @app.get("/paris_org/olympic/sport_info")
@@ -77,7 +96,6 @@ async def delete_sport_info(sport_id):
         return "Succesfully deleted sport_info item"
     raise HTTPException(
         404, f"there is no sport_info item with this sport_id {sport_id}")
-##################################################################
 
 
 @app.get("/paris_org/olympic/{sport_id}", response_model=ParisDB)
