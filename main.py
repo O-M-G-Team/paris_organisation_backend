@@ -42,9 +42,6 @@ def read_root():
 
 ###################### Example CRUD request######################
 
-@app.put("/paris_org/olympic/enter_result", response_model=ParisDB)
-async def put_sport_result(sport_result: ParisDB):
-
 @app.put("/paris_org/olympic/enter_result", response_model=Result)
 async def put_sport_result(sport_request: Result):
     """Update the result of each sport id"""
