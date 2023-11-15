@@ -1,6 +1,7 @@
 from model import ParisDB
 import requests
 from datetime import datetime
+from dateutil import parser
 
 # mongodb driver
 import motor.motor_asyncio
@@ -24,7 +25,7 @@ async def fetch_api():
             sport_id = event["sport_id"]
             sport_name = event["sport_name"]
             participating_country = event["participating_country"]
-            date_time = datetime.strptime(event["datetime"]["%date"],'%Y-%m-%dT%H:%M:%S')
+            date_time = parser.parse(event["datetime"])
             result = {}
 
             existing_sport_info = await collection.find_one({"sport_id": sport_id})
