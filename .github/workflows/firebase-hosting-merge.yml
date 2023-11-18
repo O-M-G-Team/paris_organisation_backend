@@ -11,7 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: pip install -r requirements.txt && uvicorn main:app --reload
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+      - name: Run Application
+        run: uvicorn main:app --reload
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
