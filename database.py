@@ -33,7 +33,7 @@ async def fetch_api():
 
             if existing_sport_info:
                 await update_sport_info(
-                    sport_id, sport_name, participating_country, date_time, result, sport_type
+                    sport_id, sport_name, participating_country, date_time, sport_type
                 )
             else:
                 new_sport_info = {
