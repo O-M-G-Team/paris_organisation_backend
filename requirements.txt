@@ -4,3 +4,4 @@ motor == 3.3.0
 requests
 python-dateutil
 python-dotenv
+os
