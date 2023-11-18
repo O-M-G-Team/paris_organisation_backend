@@ -10,7 +10,8 @@ import os
 
 load_dotenv()
 
-client = motor.motor_asyncio.AsyncIOMotorClient(os.getenv("MONGO_CONNECTION_STRING", "mongodb://localhost:27017"))
+mongo_connection_string = os.getenv("MONGO_CONNECTION_STRING", "mongodb://localhost:27017")
+client = motor.motor_asyncio.AsyncIOMotorClient(mongo_connection_string)
 
 database = client.ParisDB
 
