@@ -19,33 +19,38 @@ collection = database.sport_info
 
 # fetch from IOC and store in Paris database
 
+
 async def fetch_api():
 
     try:
         res = requests.get(os.getenv("GET_SPORT_INFO_URL", "https://nongnop.azurewebsites.net/match_table/Final"))
+
         res.raise_for_status()
         data = res.json()
 
         for event in data:
             sport_id = event["sport_id"]
             sport_name = event["sport_name"]
+            sport_type = event["sport_type"]
             participating_country = event["participating_country"]
             date_time = parser.parse(event["datetime"])
-            result = {}
 
             existing_sport_info = await collection.find_one({"sport_id": sport_id})
 
             if existing_sport_info:
-                await update_sport_info(
-                    sport_id, sport_name, participating_country, date_time, result
-                )
+                info = await fetch_one_sport_info(sport_id)
+                if info['result']:
+                    await update_sport_info(
+                        sport_id, sport_name, participating_country, date_time, info['result'], sport_type
+                    )
             else:
                 new_sport_info = {
                     "sport_id": sport_id,
                     "sport_name": sport_name,
+                    "sport_type": sport_type,
                     "participating_country": participating_country,
-                    "date_time": date_time, 
-                    "result": result
+                    "date_time": date_time,
+                    "result": {}
                 }
 
                 doc = await create_sport_info(new_sport_info)
@@ -55,10 +60,9 @@ async def fetch_api():
         return f"Failed to fetch data from the API: {str(e)}"
 
 
-
 ###################### Example CRUD request######################
 async def update_sport_result(sport_id, result):
-    document = await collection.find_one_and_update({"sport_id": sport_id},{'$set': {"result": result}})
+    document = await collection.find_one_and_update({"sport_id": sport_id}, {'$set': {"result": result}})
     return document
 
 
@@ -87,11 +91,12 @@ async def create_sport_info(sport_info):
         return document
 
 
-async def update_sport_info(sport_id, sport_name, participating_country, date_time, result):
+async def update_sport_info(sport_id, sport_name, participating_country, date_time, result, sport_type):
 
     await collection.update_one({"sport_id": sport_id}, {"$set": {
         "sport_id": sport_id,
         "sport_name": sport_name,
+        "sport_type": sport_type,
         "participating_country": participating_country,
         "date_time": date_time,
         "result": result
