@@ -5,12 +5,12 @@ from pydantic import BaseModel
 
 class ParisDB(BaseModel):
     sport_id: str
-    sport_name: str
-    sport_type: str | None = None
-    participating_country: list
-    date_time: datetime
-    result: Dict[str,list]
+    sport_name: str = None
+    sport_type: str = None
+    participating_country: list = None
+    date_time: datetime = None
+    result: Dict[str,list] = None
     
 class Result(BaseModel):
     sport_id: str
-    result: Dict[str,list]
+    result: Dict[str,list] = None
