@@ -13,8 +13,6 @@ jobs:
       - uses: actions/checkout@v3
       - name: Install Dependencies
         run: pip install -r requirements.txt
-      - name: Run Application
-        run: uvicorn main:app --reload
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
