@@ -24,6 +24,7 @@ async def fetch_api():
         for event in data:
             sport_id = event["sport_id"]
             sport_name = event["sport_name"]
+            sport_type = event["sport_type"]
             participating_country = event["participating_country"]
             date_time = parser.parse(event["datetime"])
             result = {}
@@ -38,6 +39,7 @@ async def fetch_api():
                 new_sport_info = {
                     "sport_id": sport_id,
                     "sport_name": sport_name,
+                    "sport_type": sport_type,
                     "participating_country": participating_country,
                     "date_time": date_time, 
                     "result": result
