@@ -33,7 +33,7 @@ async def fetch_api():
 
             if existing_sport_info:
                 await update_sport_info(
-                    sport_id, sport_name, participating_country, date_time, result
+                    sport_id, sport_name, participating_country, date_time, result, sport_type
                 )
             else:
                 new_sport_info = {
@@ -84,11 +84,12 @@ async def create_sport_info(sport_info):
         return document
 
 
-async def update_sport_info(sport_id, sport_name, participating_country, date_time, result):
+async def update_sport_info(sport_id, sport_name, participating_country, date_time, result, sport_type):
 
     await collection.update_one({"sport_id": sport_id}, {"$set": {
         "sport_id": sport_id,
         "sport_name": sport_name,
+        "sport_type": sport_type,
         "participating_country": participating_country,
         "date_time": date_time,
         "result": result
