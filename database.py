@@ -22,7 +22,7 @@ collection = database.sport_info
 async def fetch_api():
 
     try:
-        res = requests.get(os.getenv("GET_SPORT_INFO_URL", "https://nongnop.azurewebsites.net/match_table/Final"))
+        res = requests.get(os.getenv("GET_SPORT_INFO_URL", "https://nongnop.azurewebsites.net/match_table/round/Final"))
         res.raise_for_status()
         data = res.json()
 
