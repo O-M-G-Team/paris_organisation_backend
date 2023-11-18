@@ -2,11 +2,15 @@ from model import ParisDB
 import requests
 from datetime import datetime
 from dateutil import parser
+from dotenv import load_dotenv
 
 # mongodb driver
 import motor.motor_asyncio
+import os
 
-client = motor.motor_asyncio.AsyncIOMotorClient('mongodb://localhost:27017')
+load_dotenv()
+
+client = motor.motor_asyncio.AsyncIOMotorClient(os.getenv("MONGO_CONNECTION_STRING", "mongodb://localhost:27017"))
 
 database = client.ParisDB
 
@@ -17,7 +21,7 @@ collection = database.sport_info
 async def fetch_api():
 
     try:
-        res = requests.get("https://nongnop.azurewebsites.net/match_table/Final")
+        res = requests.get(os.getenv("GET_SPORT_INFO_URL", "https://nongnop.azurewebsites.net/match_table/Final"))
         res.raise_for_status()
         data = res.json()
 
