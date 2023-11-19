@@ -10,9 +10,9 @@ app = FastAPI()
 from database import (
     fetch_one_sport_info,
     fetch_all_sport_infos,
-    create_sport_info,
-    update_sport_info,
-    remove_sport_info,
+    # create_sport_info,
+    # update_sport_info,
+    # remove_sport_info,
     update_sport_result,
     fetch_api
 )
