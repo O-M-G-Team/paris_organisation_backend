@@ -2,12 +2,13 @@ from model import ParisDB
 import requests
 from datetime import datetime
 from dateutil import parser
+import os
+from dotenv import load_dotenv
 
 # mongodb driver
 import motor.motor_asyncio
 
-client = motor.motor_asyncio.AsyncIOMotorClient('mongodb://localhost:27017')
-
+client = motor.motor_asyncio.AsyncIOMotorClient(os.getenv("DATABASE_URL",'mongodb://localhost:27017'))
 database = client.ParisDB
 
 collection = database.sport_info
