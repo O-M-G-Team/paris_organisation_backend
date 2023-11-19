@@ -63,7 +63,6 @@ async def fetch_api():
         return f"Failed to fetch data from the API: {str(e)}"
 
 
-###################### Example CRUD request######################
 async def update_sport_result(sport_id, result):
     document = await collection.find_one_and_update({"sport_id": sport_id}, {'$set': {"result": result}})
     return document
@@ -112,4 +111,3 @@ async def remove_sport_info(sport_id):
     await collection.delete_one({"sport_id": sport_id})
     return True
 
-##################################################################
