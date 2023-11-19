@@ -1,11 +1,3 @@
-from database import (
-    fetch_one_sport_info,
-    fetch_all_sport_infos,
-    create_sport_info,
-    update_sport_info,
-    remove_sport_info, 
-    fetch_api
-)
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from model import ParisDB, Result
@@ -25,11 +17,11 @@ from database import (
     fetch_api
 )
 
-origins = ['http://localhost:5173', 'https://nongnop.azurewebsites.net/match_table/']
+origins = ['http://localhost:5173']
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['*'],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]
