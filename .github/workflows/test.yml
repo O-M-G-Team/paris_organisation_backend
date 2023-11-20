@@ -10,6 +10,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    env:
+      TEST: ${{ secrets.TEST }}
+      TEST_DB: ${{ secrets.TEST_DB }}
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -27,11 +31,6 @@ jobs:
 
     - name: Install dependencies
       run: pip install -r requirements.txt
-
-    - name: set env
-      env:
-        TEST: ${{ secrets.TEST }}
-        TEST_DB: ${{ secrets.TEST_DB }}
 
     - name: Run tests
       run: python test_main.py
