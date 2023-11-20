@@ -4,6 +4,8 @@ from datetime import datetime
 from dateutil import parser
 import os
 from dotenv import load_dotenv
+from decouple import config
+
 
 # mongodb driver
 import motor.motor_asyncio
@@ -11,11 +13,13 @@ import motor.motor_asyncio
 client = motor.motor_asyncio.AsyncIOMotorClient(os.getenv("DATABASE_URL",'mongodb://localhost:27017'))
 database = client.ParisDB
 
-collection = database.sport_info
+if config('TEST', default=False, cast=bool):
+    collection = database.test_sport_info
+else:
+    collection = database.sport_info
+
 
 # fetch from IOC and store in Paris database
-
-
 async def fetch_api():
 
     try:

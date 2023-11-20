@@ -4,6 +4,11 @@ from httpx import AsyncClient
 from main import app
 import pytest_asyncio
 import asyncio
+from decouple import config
+
+
+if not config('TEST', default=False, cast=bool):
+    pytest.skip("Skipping tests because Test configuration is set to False", allow_module_level=True)
 
 
 @pytest_asyncio.fixture
@@ -18,7 +23,7 @@ def event_loop():
     yield loop
     loop.close()
 
-
+   
 pytestmark = pytest.mark.asyncio
 
 
@@ -59,13 +64,13 @@ async def test_get_sport_detail_by_invalid_sport_id(client: AsyncClient) -> None
 
 async def test_put_sport_result_with_valid_sport_id_and_result_format(client: AsyncClient) -> None:
     """Update sport result to the existing sport datail with the given sport_id."""
-    payload = {"sport_id": "ATH0102", "result": {"gold": ["USA"], "silver": ['Japan'], "bronze": ["China"]}}
+    payload = {"sport_id": "ATH0102", "result": {"gold": ["UK"], "silver": ['Japan'], "bronze": ["China"]}}
     response = await client.put("/paris_org/olympic/enter_result", json=payload)
     assert response.status_code == 200
 
 async def test_put_sport_result_with_invalid_sport_id(client: AsyncClient) -> None:
     """Update sport result to the existing sport datail with the invalid sport_id."""
-    payload = {"sport_id": "wrong_id", "result": {"gold": ["USA"], "silver": ['Japan'], "bronze": ["China"]}}
+    payload = {"sport_id": "wrong_id", "result": {"gold": ["UK"], "silver": ['Japan'], "bronze": ["China"]}}
     response = await client.put("/paris_org/olympic/enter_result", json=payload)
     assert response.status_code == 404
 
