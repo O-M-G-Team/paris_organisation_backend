@@ -5,3 +5,5 @@ requests
 python-dateutil
 python-dotenv
 gunicorn
+httpx
+pytest-asyncio

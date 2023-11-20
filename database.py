@@ -2,20 +2,23 @@ from model import ParisDB
 import requests
 from datetime import datetime
 from dateutil import parser
-import os
 from dotenv import load_dotenv
+from decouple import config
+
 
 # mongodb driver
 import motor.motor_asyncio
 
-client = motor.motor_asyncio.AsyncIOMotorClient(os.getenv("DATABASE_URL",'mongodb://localhost:27017'))
+client = motor.motor_asyncio.AsyncIOMotorClient(config("DATABASE_URL", default='mongodb://localhost:27017'))
 database = client.ParisDB
 
-collection = database.sport_info
+if config('TEST', default=False, cast=bool):
+    collection = database.test_sport_info
+else:
+    collection = database.sport_info
+
 
 # fetch from IOC and store in Paris database
-
-
 async def fetch_api():
 
     try:
@@ -63,7 +66,6 @@ async def fetch_api():
         return f"Failed to fetch data from the API: {str(e)}"
 
 
-###################### Example CRUD request######################
 async def update_sport_result(sport_id, result):
     document = await collection.find_one_and_update({"sport_id": sport_id}, {'$set': {"result": result}})
     return document
@@ -108,8 +110,7 @@ async def update_sport_info(sport_id, sport_name, participating_country, date_ti
     return document
 
 
-async def remove_sport_info(sport_id):
-    await collection.delete_one({"sport_id": sport_id})
-    return True
+# async def remove_sport_info(sport_id):
+#     await collection.delete_one({"sport_id": sport_id})
+#     return True
 
-##################################################################
