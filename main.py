@@ -18,8 +18,6 @@ from database import (
     fetch_api
 )
 
-origins = [config('FRONTEND_PATH')]
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
