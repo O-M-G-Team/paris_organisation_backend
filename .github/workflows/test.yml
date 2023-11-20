@@ -13,6 +13,7 @@ jobs:
     env:
       TEST: ${{ secrets.TEST }}
       TEST_DB: ${{ secrets.TEST_DB }}
+      IOC_PATH: ${{ secrets.IOC_PATH }}
 
     steps:
     - name: Checkout code
