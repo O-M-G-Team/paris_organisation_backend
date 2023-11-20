@@ -22,8 +22,7 @@ else:
 async def fetch_api():
 
     try:
-        res = requests.get(
-            "https://nongnop.azurewebsites.net/match_table/round/Final")
+        res = requests.get(config('IOC_PATH'))
         res.raise_for_status()
         data = res.json()
 
@@ -33,6 +32,7 @@ async def fetch_api():
             sport_type = event["sport_type"]
             participating_country = event["participating_country"]
             date_time = parser.parse(event["datetime"])
+            result = {}
             if "result" in event:
                 result = event["result"]
 

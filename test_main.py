@@ -51,7 +51,7 @@ async def test_get_sport_detail_by_valid_sport_id(client: AsyncClient) -> None:
     json_response = response.json()
     assert response.status_code == 200
     assert json_response["sport_name"] == "Women's 20km Race Walk"
-    assert json_response["sport_type"] == "Athletics"
+    assert json_response["sport_type"] == "ATHLETICS"
     assert len(json_response["participating_country"]) != 0
     assert json_response["date_time"] == "2024-08-01T07:30:00"
 
@@ -65,11 +65,16 @@ async def test_get_sport_detail_by_invalid_sport_id(client: AsyncClient) -> None
 async def test_put_sport_result_with_valid_sport_id_and_result_format(client: AsyncClient) -> None:
     """Update sport result to the existing sport datail with the given sport_id."""
     try:
-        response = await client.get("/paris_org/olympic/ATH0206")
-        participating_countries = response.json()
-        payload = {"sport_id": "ATH0206", "result": {"gold": participating_countries[0], "silver": participating_countries[1], "bronze": participating_countries[2]}}
-        response = await client.put("/paris_org/olympic/enter_result", json=payload)
+        sport_detail = await client.get("/paris_org/olympic/ATH0102")
+        participating_countries = sport_detail.json()["participating_country"]
+        payload = {"sport_id": "ATH0102", "result": {"gold": [participating_countries[0]], "silver": [participating_countries[1]], "bronze": [participating_countries[2]]}}
+        await client.put("/paris_org/olympic/enter_result", json=payload)
+        response = await client.get("/paris_org/olympic/ATH0102")
+        print(response.json()["result"])
         assert response.status_code == 200
+        assert response.json()["result"]["gold"] == [participating_countries[0]]
+        assert response.json()["result"]["silver"] == [participating_countries[1]]
+        assert response.json()["result"]["bronze"] == [participating_countries[2]]
     except KeyError:
         raise AssertionError("Participating countries less than 3")
 

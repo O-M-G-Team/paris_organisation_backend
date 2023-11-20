@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from model import ParisDB, Result
 from typing import List, Dict
 from datetime import datetime
+from decouple import config
 
 # App object
 app = FastAPI()
@@ -17,11 +18,11 @@ from database import (
     fetch_api
 )
 
-origins = ['http://localhost:5173']
+origins = [config('FRONTEND_PATH')]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]
