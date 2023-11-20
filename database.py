@@ -2,7 +2,6 @@ from model import ParisDB
 import requests
 from datetime import datetime
 from dateutil import parser
-import os
 from dotenv import load_dotenv
 from decouple import config
 
@@ -10,7 +9,7 @@ from decouple import config
 # mongodb driver
 import motor.motor_asyncio
 
-client = motor.motor_asyncio.AsyncIOMotorClient(os.getenv("DATABASE_URL",'mongodb://localhost:27017'))
+client = motor.motor_asyncio.AsyncIOMotorClient(config("DATABASE_URL", default='mongodb://localhost:27017'))
 database = client.ParisDB
 
 if config('TEST', default=False, cast=bool):

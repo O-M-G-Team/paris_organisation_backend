@@ -52,7 +52,7 @@ async def test_get_sport_detail_by_valid_sport_id(client: AsyncClient) -> None:
     assert response.status_code == 200
     assert json_response["sport_name"] == "Women's 20km Race Walk"
     assert json_response["sport_type"] == "Athletics"
-    assert json_response["participating_country"] == [] #TODO add participating_country
+    assert len(json_response["participating_country"]) != 0
     assert json_response["date_time"] == "2024-08-01T07:30:00"
 
 async def test_get_sport_detail_by_invalid_sport_id(client: AsyncClient) -> None:
