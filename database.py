@@ -1,20 +1,20 @@
 from model import ParisDB
 import requests
-from datetime import datetime
 from dateutil import parser
-from dotenv import load_dotenv
 from decouple import config
 
 
 # mongodb driver
 import motor.motor_asyncio
 
-client = motor.motor_asyncio.AsyncIOMotorClient(config("DATABASE_URL", default='mongodb://localhost:27017'))
-database = client.ParisDB
 
 if config('TEST', default=False, cast=bool):
+    client = motor.motor_asyncio.AsyncIOMotorClient(config("TEST_DB", default='mongodb://localhost:27017'))
+    database = client.ParisDB
     collection = database.test_sport_info
 else:
+    client = motor.motor_asyncio.AsyncIOMotorClient(config("ACTUAL_DB", default='mongodb://localhost:27017'))
+    database = client.ParisDB
     collection = database.sport_info
 
 
