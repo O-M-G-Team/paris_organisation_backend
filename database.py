@@ -1,6 +1,7 @@
+from datetime import datetime
 from model import ParisDB
 import requests
-from datetime import datetime
+
 from dateutil import parser
 from dotenv import load_dotenv
 from decouple import config
@@ -9,7 +10,8 @@ from decouple import config
 # mongodb driver
 import motor.motor_asyncio
 
-client = motor.motor_asyncio.AsyncIOMotorClient(config("DATABASE_URL", default='mongodb://localhost:27017'))
+client = motor.motor_asyncio.AsyncIOMotorClient(
+    config("DATABASE_URL", default='mongodb://localhost:27017'))
 database = client.ParisDB
 
 if config('TEST', default=False, cast=bool):
@@ -42,13 +44,20 @@ async def fetch_api():
                 info = await fetch_one_sport_info(sport_id)
                 if len(info['result']) != 0:
                     await update_sport_info(
-                        sport_id, sport_name, participating_country, date_time, info[
-                            'result'], sport_type
+                        sport_id,
+                        sport_name,
+                        participating_country,
+                        date_time,
+                        info['result'],
+                        sport_type
                     )
                 else:
-                    await update_sport_info(
-                        sport_id, sport_name, participating_country, date_time, result, sport_type
-                    )
+                    await update_sport_info(sport_id,
+                                            sport_name,
+                                            participating_country,
+                                            date_time,
+                                            result,
+                                            sport_type)
             else:
                 new_sport_info = {
                     "sport_id": sport_id,
@@ -67,7 +76,8 @@ async def fetch_api():
 
 
 async def update_sport_result(sport_id, result):
-    document = await collection.find_one_and_update({"sport_id": sport_id}, {'$set': {"result": result}})
+    document = await collection.find_one_and_update({"sport_id": sport_id},
+                                                    {'$set': {"result": result}})
     return document
 
 
@@ -96,7 +106,12 @@ async def create_sport_info(sport_info):
         return document
 
 
-async def update_sport_info(sport_id, sport_name, participating_country, date_time, result, sport_type):
+async def update_sport_info(sport_id,
+                            sport_name,
+                            participating_country,
+                            date_time,
+                            result,
+                            sport_type):
 
     await collection.update_one({"sport_id": sport_id}, {"$set": {
         "sport_id": sport_id,
@@ -113,4 +128,3 @@ async def update_sport_info(sport_id, sport_name, participating_country, date_ti
 # async def remove_sport_info(sport_id):
 #     await collection.delete_one({"sport_id": sport_id})
 #     return True
-
