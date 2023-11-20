@@ -54,9 +54,11 @@ async def get_sport_detail_by_sport_id(sport_id):
 async def put_sport_result(sport_request: Result):
     """Update the result of each sport id"""
     response = await update_sport_result(sport_request.sport_id, sport_request.result)
+    if response == "forbidden countries":
+        raise HTTPException(403, f"Counties are not allowed. They are not in participating country list.")
     if response:
         return response
-    raise HTTPException(404, f"there is no sport_result item with this sport_id {sport_request.sport_id}")
+    raise HTTPException(404, f"There is no sport_result item with this sport_id {sport_request.sport_id}")
 
 
 

@@ -64,9 +64,15 @@ async def test_get_sport_detail_by_invalid_sport_id(client: AsyncClient) -> None
 
 async def test_put_sport_result_with_valid_sport_id_and_result_format(client: AsyncClient) -> None:
     """Update sport result to the existing sport datail with the given sport_id."""
-    payload = {"sport_id": "ATH0102", "result": {"gold": ["UK"], "silver": ['Japan'], "bronze": ["China"]}}
-    response = await client.put("/paris_org/olympic/enter_result", json=payload)
-    assert response.status_code == 200
+    try:
+        response = await client.get("/paris_org/olympic/ATH0206")
+        participating_countries = response.json()
+        payload = {"sport_id": "ATH0206", "result": {"gold": participating_countries[0], "silver": participating_countries[1], "bronze": participating_countries[2]}}
+        response = await client.put("/paris_org/olympic/enter_result", json=payload)
+        assert response.status_code == 200
+    except KeyError:
+        raise AssertionError("Participating countries less than 3")
+
 
 async def test_put_sport_result_with_invalid_sport_id(client: AsyncClient) -> None:
     """Update sport result to the existing sport datail with the invalid sport_id."""
@@ -82,3 +88,12 @@ async def test_put_sport_result_with_wrong_result_format(client: AsyncClient) ->
     payload = {"sport_id": "wrong_id", "result": {"gold": "USA", "silver": 'Japan', "bronze": "China"}}
     response = await client.put("/paris_org/olympic/enter_result", json=payload)
     assert response.status_code == 422
+
+
+async def test_put_sport_result_for_countries_not_in_participating_countries(client: AsyncClient) -> None:
+    """
+    Return 404 if referee enter sport results for countries other than participating countries.
+    """
+    payload = {"sport_id": "ATH0102", "result": {"gold": ["UK"], "silver": ['Japan'], "bronze": ["China"]}}
+    response = await client.put("/paris_org/olympic/enter_result", json=payload)
+    assert response.status_code == 403
