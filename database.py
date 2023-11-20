@@ -1,20 +1,20 @@
 from model import ParisDB
 import requests
-from datetime import datetime
 from dateutil import parser
-from dotenv import load_dotenv
 from decouple import config
 
 
 # mongodb driver
 import motor.motor_asyncio
 
-client = motor.motor_asyncio.AsyncIOMotorClient(config("DATABASE_URL", default='mongodb://localhost:27017'))
-database = client.ParisDB
 
 if config('TEST', default=False, cast=bool):
+    client = motor.motor_asyncio.AsyncIOMotorClient(config("TEST_DB", default='mongodb://localhost:27017'))
+    database = client.ParisDB
     collection = database.test_sport_info
 else:
+    client = motor.motor_asyncio.AsyncIOMotorClient(config("ACTUAL_DB", default='mongodb://localhost:27017'))
+    database = client.ParisDB
     collection = database.sport_info
 
 
@@ -22,8 +22,7 @@ else:
 async def fetch_api():
 
     try:
-        res = requests.get(
-            "https://nongnop.azurewebsites.net/match_table/round/Final")
+        res = requests.get(config('IOC_PATH'))
         res.raise_for_status()
         data = res.json()
 
@@ -33,6 +32,7 @@ async def fetch_api():
             sport_type = event["sport_type"]
             participating_country = event["participating_country"]
             date_time = parser.parse(event["datetime"])
+            result = {}
             if "result" in event:
                 result = event["result"]
 
@@ -67,8 +67,21 @@ async def fetch_api():
 
 
 async def update_sport_result(sport_id, result):
-    document = await collection.find_one_and_update({"sport_id": sport_id}, {'$set': {"result": result}})
-    return document
+    try:
+        document = await collection.find_one({"sport_id": sport_id})
+        participating_country = document["participating_country"]
+        is_in_participating_country = True
+        for key, value in result.items():
+            for country in value:
+                if country not in participating_country:
+                    is_in_participating_country = False
+                    break
+        if not is_in_participating_country:
+            return "forbidden countries"
+        document = await collection.find_one_and_update({"sport_id": sport_id}, {'$set': {"result": result}})
+        return document
+    except:
+        return False
 
 
 async def fetch_one_sport_info(sport_id):
@@ -96,7 +109,7 @@ async def create_sport_info(sport_info):
         return document
 
 
-async def update_sport_info(sport_id, sport_name, participating_country, date_time, result, sport_type):
+async def update_sport_info(sport_id, sport_name, participating_country, date_time, result, sport_type): 
 
     await collection.update_one({"sport_id": sport_id}, {"$set": {
         "sport_id": sport_id,

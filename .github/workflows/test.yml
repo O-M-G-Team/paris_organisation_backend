@@ -1,0 +1,37 @@
+name: Run Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    env:
+      TEST: ${{ secrets.TEST }}
+      TEST_DB: ${{ secrets.TEST_DB }}
+      IOC_PATH: ${{ secrets.IOC_PATH }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+
+    - name: Create virtual environment
+      run: python -m venv venv
+
+    - name: Activate virtual environment
+      run: source venv/bin/activate
+
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Run tests
+      run: pytest test_main.py
