@@ -28,11 +28,10 @@ jobs:
     - name: Install dependencies
       run: pip install -r requirements.txt
 
-    - name: Set up .env file
-      run: |
-        cp .env.example .env
-        echo "TEST_DB=${{ secrets.TEST_DB }}" >> .env
-        echo "TEST=${{ secrets.TEST }}" >> .env
+    - name: set env
+      env:
+        TEST: ${{ secrets.TEST }}
+        TEST_DB: ${{ secrets.TEST_DB }}
 
     - name: Run tests
       run: python test_main.py
