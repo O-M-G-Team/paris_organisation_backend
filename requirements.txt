@@ -7,3 +7,4 @@ python-dotenv
 gunicorn
 httpx
 pytest-asyncio
+python-decouple
