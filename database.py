@@ -2,8 +2,6 @@ from model import ParisDB
 import requests
 from dateutil import parser
 from decouple import config
-import aiohttp
-import asyncio
 
 
 # mongodb driver
@@ -22,49 +20,49 @@ else:
 
 # fetch from IOC and store in Paris database
 async def fetch_api():
+
     try:
-        async with aiohttp.ClientSession() as session:
-            res = await session.get(config('IOC_PATH'))
-            res.raise_for_status()
-            data = await res.json()
+        res = requests.get(config('IOC_PATH'))
+        res.raise_for_status()
+        data = res.json()
 
-            update_operations = []
+        for event in data:
+            sport_id = event["sport_id"]
+            sport_name = event["sport_name"]
+            sport_type = event["sport_type"]
+            participating_country = event["participating_country"]
+            date_time = parser.parse(event["datetime"])
+            result = {}
+            if "result" in event:
+                result = event["result"]
 
-            for event in data:
-                sport_id = event["sport_id"]
-                sport_name = event["sport_name"]
-                sport_type = event["sport_type"]
-                participating_country = event["participating_country"]
-                date_time = parser.parse(event["datetime"])
-                result = event.get("result", {})
+            existing_sport_info = await collection.find_one({"sport_id": sport_id})
 
-                existing_sport_info = await collection.find_one({"sport_id": sport_id})
-
-                if existing_sport_info:
-                    info = await fetch_one_sport_info(sport_id)
-                    if info['result']:
-                        update_operations.append(
-                            update_sport_info(sport_id, sport_name, participating_country, date_time, info['result'], sport_type)
-                        )
-                    else:
-                        update_operations.append(
-                            update_sport_info(sport_id, sport_name, participating_country, date_time, result, sport_type)
-                        )
+            if existing_sport_info:
+                info = await fetch_one_sport_info(sport_id)
+                if len(info['result']) != 0:
+                    await update_sport_info(
+                        sport_id, sport_name, participating_country, date_time, info[
+                            'result'], sport_type
+                    )
                 else:
-                    new_sport_info = {
-                        "sport_id": sport_id,
-                        "sport_name": sport_name,
-                        "sport_type": sport_type,
-                        "participating_country": participating_country,
-                        "date_time": date_time,
-                        "result": {}
-                    }
-                    update_operations.append(create_sport_info(new_sport_info))
+                    await update_sport_info(
+                        sport_id, sport_name, participating_country, date_time, result, sport_type
+                    )
+            else:
+                new_sport_info = {
+                    "sport_id": sport_id,
+                    "sport_name": sport_name,
+                    "sport_type": sport_type,
+                    "participating_country": participating_country,
+                    "date_time": date_time,
+                    "result": {}
+                }
 
-            await asyncio.gather(*update_operations)
-            
-            return "Sport info updated or created successfully"
-    except aiohttp.ClientError as e:
+                doc = await create_sport_info(new_sport_info)
+
+        return "Sport info updated or created successfully"
+    except requests.RequestException as e:
         return f"Failed to fetch data from the API: {str(e)}"
 
 
