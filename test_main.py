@@ -33,17 +33,20 @@ async def test_read_root(client: AsyncClient) -> None:
     assert response.status_code == 200
     assert response.json() == {"paris": "organisation"}
 
+
 async def test_fetch_api(client: AsyncClient) -> None:
     """Get the sport information from ioc."""
     response = await client.get("/api/data-ioc")
     assert response.status_code == 200
     assert response.json() == "Sport info updated or created successfully"
 
+
 async def test_get_sport_info(client: AsyncClient) -> None:
     """Get all sport information from poc database."""
     response = await client.get("/paris_org/olympic/sport_info")
     assert response.status_code == 200
     assert len(response.json()) != 0
+
 
 async def test_get_sport_detail_by_valid_sport_id(client: AsyncClient) -> None:
     """Get sport detail by sport_id using valid sport_id."""
@@ -54,6 +57,7 @@ async def test_get_sport_detail_by_valid_sport_id(client: AsyncClient) -> None:
     assert json_response["sport_type"] == "ATHLETICS"
     assert len(json_response["participating_country"]) != 0
     assert json_response["date_time"] == "2024-08-01T07:30:00"
+
 
 async def test_get_sport_detail_by_invalid_sport_id(client: AsyncClient) -> None:
     """Get sport detail by sport_id using invalid sport_id."""
@@ -84,6 +88,7 @@ async def test_put_sport_result_with_invalid_sport_id(client: AsyncClient) -> No
     payload = {"sport_id": "wrong_id", "result": {"gold": ["UK"], "silver": ['Japan'], "bronze": ["China"]}}
     response = await client.put("/paris_org/olympic/enter_result", json=payload)
     assert response.status_code == 404
+
 
 async def test_put_sport_result_with_wrong_result_format(client: AsyncClient) -> None:
     """

@@ -59,7 +59,7 @@ async def fetch_api():
                     "result": {}
                 }
 
-                doc = await create_sport_info(new_sport_info)
+                await create_sport_info(new_sport_info)
 
         return "Sport info updated or created successfully"
     except requests.RequestException as e:
@@ -121,9 +121,3 @@ async def update_sport_info(sport_id, sport_name, participating_country, date_ti
     }})
     document = await collection.find_one({"sport_id": sport_id})
     return document
-
-
-# async def remove_sport_info(sport_id):
-#     await collection.delete_one({"sport_id": sport_id})
-#     return True
-
