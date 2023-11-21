@@ -8,3 +8,5 @@ gunicorn
 httpx
 pytest-asyncio
 python-decouple
+asyncio
+aiohttp
